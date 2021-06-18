@@ -479,6 +479,11 @@ id AFJSONObjectByRemovingKeysWithNullValues(id JSONObject, NSJSONReadingOptions 
     
     id responseObject = [NSPropertyListSerialization propertyListWithData:data options:self.readOptions format:NULL error:&serializationError];
     
+    if (!responseObject) {
+        //修复服务端返回不是json格式时无法解析的问题
+        responseObject = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    }
+    
     if (!responseObject)
     {
         if (error) {
